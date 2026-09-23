@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+!.env.example
+docker-compose.override.yml
+*.log
+*.tar
+*.tar.gz
+.DS_Store

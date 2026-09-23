@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F0FDF4">
+<meta name="description" content="Confidential research questionnaire on plant stimulant use among pharmacy students — KMTC Nakuru.">
+<title>Plant Stimulant Use Survey – KMTC Nakuru</title>
+<style>
+  /* =========================================================================
+     TOKENS
+     ========================================================================= */
+  :root {
+    --g50:  #F0FDF4;
+    --g100: #DCFCE7;
+    --g200: #BBF7D0;
+    --g300: #86EFAC;
+    --g400: #4ADE80;
+    --g500: #22C55E;
+    --g600: #16A34A;
+    --g700: #15803D;
+    --g800: #166534;
+    --g900: #14532D;
+    --g950: #052E16;
+
+    --ink:   #0F1F17;
+    --body:  #4B5563;
+    --muted: #6B7280;
+    --faint: #9CA3AF;
+
+    --bg:        #F0FDF4;
+    --surface:   #FFFFFF;
+    --surface-2: #F9FAFB;
+
+    --line:   #DCFCE7;
+    --line-2: #E5E7EB;
+
+    --err:      #DC2626;
+    --err-soft: #FEF2F2;
+    --ok:       #16A34A;
+
+    --ring: rgba(22, 101, 52, .16);
+
+    --r-sm: 10px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 24px;
+
+    --shadow-sm: 0 1px 2px rgba(6, 46, 22, .04);
+    --shadow-md: 0 4px 16px rgba(6, 46, 22, .06);
+    --shadow-lg: 0 12px 32px rgba(6, 46, 22, .10);
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Helvetica Neue', Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--body);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-left:  env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 { color: var(--ink); margin: 0; line-height: 1.25; }
+  p { margin: 0; }
+  button { font: inherit; }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  legend { padding: 0; }
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      transition-duration: .01ms !important;
+    }
+  }
+
+  /* =========================================================================
+     APP BAR
+     ========================================================================= */
+  .app-bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(240, 253, 244, .94);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    padding-top: env(safe-area-inset-top);
+  }
+  .app-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .exit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 10px 6px 6px;
+    border-radius: 10px;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .exit-link:hover { background: var(--g100); }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--line);
+  }
+  .step-badge .total { color: var(--muted); font-weight: 500; }
+
+  /* Step dots */
+  .step-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px 12px;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 36px;
+    flex-wrap: nowrap;
+  }
+  .dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    background: var(--surface);
+    color: var(--faint);
+    border: 1px solid var(--line-2);
+    box-sizing: border-box;
+    transition: background .25s, color .25s, transform .25s, border-color .25s;
+  }
+  .dot.done {
+    background: var(--g200);
+    border-color: var(--g200);
+    color: var(--g900);
+  }
+  .dot.current {
+    background: var(--g800);
+    border-color: var(--g800);
+    color: #fff;
+    transform: scale(1.12);
+    box-shadow: 0 4px 12px rgba(22, 101, 52, .28);
+  }
+  @media (max-width: 400px) {
+    .dot {
+      flex-basis: 24px;
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      max-width: 24px;
+      max-height: 24px;
+      font-size: 11px;
+    }
+    .step-dots { gap: 6px; }
+  }
+
+  /* =========================================================================
+     MAIN
+     ========================================================================= */
+  main {
+    padding: 8px 20px 180px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .step { display: none; }
+  .step.active { display: block; animation: stepIn .28s cubic-bezier(.2,.8,.2,1); }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* =========================================================================
+     CARD
+     ========================================================================= */
+  .card {
+    background: var(--surface);
+    border-radius: var(--r-xl);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 16px;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--g700);
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -.022em;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.22;
+  }
+  .card-lede {
+    font-size: 15px;
+    color: var(--body);
+    line-height: 1.62;
+    margin-bottom: 18px;
+  }
+  .card-lede:last-child { margin-bottom: 0; }
+  .card-lede strong { color: var(--ink); font-weight: 600; }
+
+  .researcher-panel {
+    background: var(--g50);
+    border-radius: var(--r-md);
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+  .researcher-panel h3 {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--g800);
+    margin-bottom: 12px;
+  }
+  .researcher-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .researcher-item { min-width: 0; }
+  .researcher-item dt {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .researcher-item dd {
+    margin: 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  @media (max-width: 420px) {
+    .researcher-grid { grid-template-columns: 1fr; gap: 10px; }
+  }
+
+  .notice {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--g50);
+    border-radius: var(--r-md);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--g900);
+    margin-bottom: 18px;
+  }
+  .notice svg { flex-shrink: 0; margin-top: 2px; color: var(--g700); }
+  .notice strong { color: var(--g900); font-weight: 600; }
+
+  /* =========================================================================
+     QUESTIONS
+     ========================================================================= */
+  .q { margin: 0 0 24px; }
+  .q:last-child { margin-bottom: 0; }
+  .q.invalid .q-label { color: var(--err); }
+
+  .q-label {
+    display: block;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.45;
+  }
+  .req { color: var(--err); margin-left: 2px; }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .input {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-md);
+    transition: border-color .15s, box-shadow .15s, background .15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .input::placeholder { color: var(--faint); opacity: 1; }
+  .input:hover { background: #F3F4F6; }
+  .input:focus {
+    outline: none;
+    background: var(--surface);
+    border-color: var(--g800);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--err);
+    background: var(--err-soft);
+  }
+  textarea.input {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.55;
+  }
+
+  /* Choices */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .choice {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    padding: 14px 18px;
+    background: var(--surface-2);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    font-size: 15.5px;
+    color: var(--ink);
+    font-weight: 500;
+    transition: background .18s, border-color .18s, box-shadow .18s, color .18s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .choice:hover { background: #F3F4F6; }
+  .choice:focus-within {
+    border-color: var(--g800);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    width: 1px; height: 1px;
+    pointer-events: none;
+  }
+  .choice .marker {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--line-2);
+    border-radius: 50%;
+    background: var(--surface);
+    display: grid;
+    place-items: center;
+    transition: border-color .15s, background .15s;
+  }
+  .choice .marker::after {
+    content: "";
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    transform: scale(0);
+    transition: transform .15s;
+  }
+  .choice input:checked ~ .marker {
+    border-color: var(--g800);
+    background: var(--g800);
+  }
+  .choice input:checked ~ .marker::after { transform: scale(1); }
+
+  .choice:has(input:checked) {
+    background: var(--g800);
+    color: #fff;
+    border-color: var(--g800);
+    box-shadow: 0 6px 16px rgba(22, 101, 52, .22);
+  }
+  .choice:has(input:checked) .marker {
+    background: rgba(255,255,255,.2);
+    border-color: rgba(255,255,255,.9);
+  }
+  .choice:has(input:checked) .marker::after { background: #FFFFFF; }
+
+  .choice[data-type="check"] .marker { border-radius: 6px; }
+  .choice[data-type="check"] .marker::after {
+    width: 12px; height: 12px;
+    border-radius: 2px;
+    background: #FFFFFF;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  /* Likert */
+  .likert-item {
+    padding: 20px 0;
+    margin: 0;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .likert-item:first-of-type { padding-top: 4px; }
+  .likert-item:last-child { border-bottom: 0; padding-bottom: 0; }
+  .likert-item.invalid .likert-statement { color: var(--err); }
+
+  .likert-statement {
+    font-size: 15.5px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.45;
+  }
+  .likert-scale {
+    display: flex;
+    gap: 8px;
+  }
+  .likert-scale .choice {
+    flex: 1;
+    min-width: 0;
+    min-height: 60px;
+    padding: 6px 4px;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+    border-radius: var(--r-md);
+    font-weight: 500;
+  }
+  .likert-scale .choice .marker { display: none; }
+  .likert-scale .choice .face {
+    font-size: 22px;
+    line-height: 1;
+    filter: grayscale(1);
+    opacity: .55;
+    transition: filter .18s, opacity .18s, transform .18s;
+  }
+  .likert-scale .choice .choice-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: .01em;
+  }
+  .likert-scale .choice:hover .face {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+  .likert-scale .choice:has(input:checked) {
+    background: var(--g800);
+    color: #fff;
+  }
+  .likert-scale .choice:has(input:checked) .face {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  .likert-scale .choice:has(input:checked) .choice-text {
+    color: #FFFFFF;
+  }
+  .scale-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  /* Substances */
+  .substance {
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .substance:last-child { margin-bottom: 0; }
+  .substance-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .substance-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--g100);
+    color: var(--g800);
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .substance-name {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .substance-eg {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .substance-detail {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--line-2);
+  }
+
+  /* Errors */
+  .error {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--err);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+  .error svg { flex-shrink: 0; margin-top: 2px; }
+
+  /* =========================================================================
+     BOTTOM ACTIONS — solid base, only top edge fades
+     ========================================================================= */
+  .bottom-actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    background: linear-gradient(to top,
+      var(--bg) 0%,
+      var(--bg) 85%,
+      rgba(240, 253, 244, 0) 100%);
+    padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+    pointer-events: none;
+  }
+  .bottom-actions-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+    pointer-events: auto;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 54px;
+    padding: 16px 24px;
+    border: 0;
+    border-radius: var(--r-md);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, box-shadow .15s, transform .06s;
+    -webkit-tap-highlight-color: transparent;
+    letter-spacing: -.005em;
+  }
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--g800);
+    color: #FFFFFF;
+    box-shadow: 0 6px 18px rgba(22, 101, 52, .25);
+    width: 100%;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--g900);
+    box-shadow: 0 8px 22px rgba(22, 101, 52, .3);
+  }
+
+  .skip-link {
+    display: block;
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--g300);
+  }
+  .skip-link:hover { color: var(--g800); }
+
+  /* Review */
+  .review-section { margin-bottom: 24px; }
+  .review-section:last-child { margin-bottom: 0; }
+  .review-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--g700);
+    margin-bottom: 10px;
+  }
+  .review-list { display: grid; gap: 6px; }
+  .review-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+  }
+  .review-row dt { color: var(--muted); font-weight: 400; flex-shrink: 0; }
+  .review-row dd {
+    margin: 0;
+    color: var(--ink);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* Save toast */
+  .save-toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(140px + env(safe-area-inset-bottom));
+    transform: translateX(-50%) translateY(calc(100% + 24px));
+    z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--ink);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    box-shadow: var(--shadow-lg);
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .25s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .save-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* Done screen */
+  .done-screen {
+    text-align: center;
+    padding: 48px 28px;
+  }
+  .done-icon {
+    width: 80px; height: 80px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--g100);
+    display: grid;
+    place-items: center;
+    color: var(--g800);
+  }
+  .done-screen h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    letter-spacing: -.02em;
+  }
+  .done-screen p {
+    color: var(--body);
+    max-width: 42ch;
+    margin: 0 auto;
+    font-size: 15px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 0 20px 190px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  footer strong { color: var(--body); font-weight: 600; }
+
+  @media (forced-colors: active) {
+    .choice, .input, .btn, .card { border: 1px solid ButtonBorder; }
+    .choice:has(input:checked) { border-color: Highlight; }
+    .btn-primary { background: Highlight; color: HighlightText; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-bar">
+  <div class="app-bar-inner">
+    <button type="button" class="exit-link" id="exitBtn" aria-label="Exit survey">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      <span>Exit</span>
+    </button>
+    <span class="step-badge">
+      <span id="stepNow">1</span><span class="total">&nbsp;/ 7</span>
+    </span>
+  </div>
+
+  <div class="step-dots" id="stepDots" aria-hidden="true">
+    <span class="dot current">1</span>
+    <span class="dot">2</span>
+    <span class="dot">3</span>
+    <span class="dot">4</span>
+    <span class="dot">5</span>
+    <span class="dot">6</span>
+    <span class="dot">7</span>
+  </div>
+</header>
+
+<main>
+<form id="survey" novalidate autocomplete="off">
+
+  <!-- ============ STEP 1 — WELCOME + CONSENT ============ -->
+  <section class="step active" data-step="0">
+    <div class="card">
+      <span class="eyebrow">Kenya Medical Training College · Nakuru</span>
+      <h1 class="card-title">Plant Stimulant Use Among Pharmacy Students</h1>
+
+      <p class="card-lede">
+        A confidential, self-administered research questionnaire on the
+        <strong>prevalence and patterns of plant-based stimulant use</strong>
+        (coffee, tea, energy drinks, khat, ginseng, kola nut,
+        <em>Leonotis leonurus</em>) among pharmacy students at KMTC Nakuru.
+        It takes about <strong>10–15 minutes</strong> to complete.
+      </p>
+
+      <div class="researcher-panel">
+        <h3>About the study</h3>
+        <dl class="researcher-grid">
+          <div class="researcher-item">
+            <dt>Principal Researcher</dt>
+            <dd>Denis Mwangi</dd>
+          </div>
+          <div class="researcher-item">
+            <dt>Registration No.</dt>
+            <dd>D/PHARM/24021/585</dd>
+          </div>
+          <div class="researcher-item">
+            <dt>Programme</dt>
+            <dd>Diploma in Pharmacy</dd>
+          </div>
+          <div class="researcher-item">
+            <dt>Supervisor</dt>
+            <dd>Dr. Sylvester Kollum</dd>
+          </div>
+          <div class="researcher-item">
+            <dt>Department</dt>
+            <dd>Pharmacy, KMTC Nakuru</dd>
+          </div>
+          <div class="researcher-item">
+            <dt>Year</dt>
+            <dd>2026</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="notice">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <span>
+          Participation is <strong>entirely voluntary</strong>. Your responses
+          are <strong>anonymous</strong> — no name or registration number is
+          collected. Because responses are anonymous, individual withdrawal
+          after submission is not possible. You may skip any question or
+          withdraw at any time without affecting your academic standing.
+        </span>
+      </div>
+
+      <p class="card-lede" style="margin-bottom:20px;">
+        By continuing, you confirm you have read the information above and
+        that you voluntarily agree to participate in this study.
+      </p>
+
+      <div class="q" data-req="Consent">
+        <div class="choices">
+          <label class="choice" data-type="check">
+            <input type="checkbox" id="consent" name="consent">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">
+              I have read and understood the information above, and I
+              voluntarily agree to participate.
+              <span class="req" aria-label="required">*</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" data-next>
+          Get started
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button type="button" class="skip-link" id="exitBtn2">Exit survey</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP 2 — DEMOGRAPHICS ============ -->
+  <section class="step" data-step="1">
+    <div class="card">
+      <span class="eyebrow">Section A · About you</span>
+      <h1 class="card-title">A few details about you</h1>
+      <p class="card-lede">
+        Do not write your name or registration number. All responses are anonymous.
+      </p>
+
+      <div class="q" data-req="Age">
+        <label class="q-label" for="age">
+          Age in years <span class="req" aria-label="required">*</span>
+        </label>
+        <input class="input" type="text" id="age" name="age"
+               inputmode="numeric" pattern="[0-9]*" maxlength="2"
+               placeholder="e.g. 21">
+      </div>
+
+      <fieldset class="q" data-req="Gender">
+        <legend class="q-label">
+          Gender <span class="req" aria-label="required">*</span>
+        </legend>
+        <div class="choices">
+          <label class="choice">
+            <input type="radio" name="gender" value="Male">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Male</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="gender" value="Female">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Female</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="gender" value="Other">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Other</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-req="Year of study">
+        <legend class="q-label">
+          Year of study <span class="req" aria-label="required">*</span>
+        </legend>
+        <div class="choices">
+          <label class="choice">
+            <input type="radio" name="year" value="Year 1">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Year 1</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="year" value="Year 2">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Year 2</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="year" value="Year 3">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Year 3</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-req="Residence">
+        <legend class="q-label">
+          Current residence <span class="req" aria-label="required">*</span>
+        </legend>
+        <div class="choices">
+          <label class="choice">
+            <input type="radio" name="residence" value="College hostel">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">College hostel</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="residence" value="Private hostel">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Private hostel</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="residence" value="Home with family">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Home with family</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="residence" value="Other">
+            <span class="marker" aria-hidden="true"></span>
+            <span class="choice-text">Other</span>
+          </label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" data-next>
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button type="button" class="skip-link" data-prev>Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP 3 — KNOWLEDGE ============ -->
+  <section class="step" data-step="2">
+    <div class="card">
+      <span class="eyebrow">Section B · Knowledge</span>
+      <h1 class="card-title">How well do you know these facts?</h1>
+      <p class="card-lede">
+        Indicate whether each statement is <strong>True</strong> or
+        <strong>False</strong>.
+      </p>
+      <div id="knowledge"></div>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" data-next>
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button type="button" class="skip-link" data-prev>Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP 4 — SUBSTANCES ============ -->
+  <section class="step" data-step="3">
+    <div class="card">
+      <span class="eyebrow">Section C · Substance use</span>
+      <h1 class="card-title">Your use of plant stimulants</h1>
+      <p class="card-lede">
+        For each substance, start with the first question. If you have
+        <strong>never</strong> used it, choose <em>No</em> &mdash; the rest is
+        skipped automatically.
+      </p>
+      <div id="substances"></div>
+
+      <div class="q" style="margin-top:24px;">
+        <label class="q-label" for="other_substance">
+          Any other plant stimulant you wish to report?
+        </label>
+        <input class="input" type="text" id="other_substance" name="other_substance"
+               placeholder="Optional — name and briefly describe">
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" data-next>
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button type="button" class="skip-link" data-prev>Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP 5 — ATTITUDES ============ -->
+  <section class="step" data-step="4">
+    <div class="card">
+      <span class="eyebrow">Section D · Attitudes</span>
+      <h1 class="card-title">Your views</h1>
+      <p class="card-lede">How much do you agree with each statement?</p>
+      <div class="scale-legend" aria-hidden="true">
+        <span>Strongly disagree</span>
+        <span>Strongly agree</span>
+      </div>
+      <div id="likert"></div>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" data-next>
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button type="button" class="skip-link" data-prev>Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP 6 — PERCEIVED EFFECTS ============ -->
+  <section class="step" data-step="5">
+    <div class="card">
+      <span class="eyebrow">Section E · In your words</span>
+      <h1 class="card-title">Any effects you've noticed?</h1>
+      <p class="card-lede">
+        Describe anything &mdash; positive or negative &mdash; that you
+        associate with your use of plant stimulants. This is optional.
+      </p>
+      <div class="q">
+        <label class="q-label" for="perceived_effects">Your response</label>
+        <textarea class="input" id="perceived_effects" name="perceived_effects"
+                  rows="6" placeholder="Share anything you feel is relevant…"></textarea>
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" data-next>
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+        <button type="button" class="skip-link" data-prev>Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP 7 — REVIEW ============ -->
+  <section class="step" data-step="6">
+    <div class="card">
+      <span class="eyebrow">Almost done</span>
+      <h1 class="card-title">Review your answers</h1>
+      <p class="card-lede">
+        Check everything is right. Tap <strong>Back</strong> to change any answer.
+      </p>
+      <div id="review"></div>
+    </div>
+
+    <div class="bottom-actions">
+      <div class="bottom-actions-inner">
+        <button type="button" class="btn btn-primary" id="submitBtn">
+          Submit responses
+        </button>
+        <button type="button" class="skip-link" data-prev>Back</button>
+        <p id="formMsg" role="status" aria-live="polite" aria-atomic="true"
+           style="text-align:center;font-weight:500;min-height:20px;
+                  font-size:13.5px;margin:4px 0 0;"></p>
+      </div>
+    </div>
+  </section>
+
+  <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;">
+    <label for="_hp">Do not fill</label>
+    <input type="text" id="_hp" name="_hp" tabindex="-1" autocomplete="off">
+  </div>
+
+</form>
+
+<section class="card done-screen" id="doneScreen" hidden role="alert">
+  <div class="done-icon" aria-hidden="true">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+         stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  </div>
+  <h2>Thank you</h2>
+  <p>Your responses have been recorded anonymously. You may close this window.</p>
+</section>
+
+<footer>
+  Research by <strong>Denis Mwangi</strong> (D/PHARM/24021/585) ·
+  Supervisor: <strong>Dr. Sylvester Kollum</strong> ·
+  Pharmacy Department, KMTC Nakuru &copy; 2026.
+</footer>
+</main>
+
+<div class="save-toast" id="saveToast" role="status" aria-live="polite">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  <span>Progress saved</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const CONFIG = {
+    autosaveKey: "kmtc_survey_draft_v4",
+    requireKnowledge: true,
+    requireAttitudes: true,
+  };
+
+  const KNOWLEDGE = [
+    { id: "kn1", text: "The active stimulant in khat is called cathinone." },
+    { id: "kn2", text: "Chronic khat use has no effect on dental health." },
+    { id: "kn3", text: "Ginseng is legal for recreational use in Kenya." },
+    { id: "kn4", text: "Excessive caffeine consumption can cause anxiety and insomnia." },
+  ];
+
+  const SUBSTANCES = [
+    { id: "coffee",   name: "Coffee",                         eg: "Brewed coffee, espresso" },
+    { id: "tea",      name: "Tea",                            eg: "Black tea, green tea" },
+    { id: "energy",   name: "Energy drinks",                  eg: "Red Bull, Monster, Predator" },
+    { id: "khat",     name: "Khat (Catha edulis)",            eg: "Miraa, muguka" },
+    { id: "ginseng",  name: "Ginseng (Panax ginseng)",        eg: "Capsules, tea, extracts" },
+    { id: "kola",     name: "Kola nut",                       eg: "Chewed or in drinks" },
+    { id: "leonotis", name: "Leonotis leonurus (wild dagga)", eg: "Herbal preparations" },
+  ];
+
+  const FREQ    = ["Daily", "Weekly", "Monthly", "Rarely"];
+  const REASONS = ["To stay awake / study", "Habit / social", "Enjoy taste", "Other"];
+
+  const ATTITUDES = [
+    "Using stimulants like khat can help students study for longer hours.",
+    "Most of my close friends use caffeine products to help with studying.",
+    "I am aware of the health risks associated with regular khat use.",
+  ];
+
+  const FACES = ["😞", "🙁", "😐", "🙂", "😄"];
+
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
+
+  const errIcon = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+    stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="12"/>
+    <line x1="12" y1="16" x2="12.01" y2="16"/>
+  </svg>`;
+
+  const form         = $("#survey");
+  const steps        = $$(".step");
+  const stepNow      = $("#stepNow");
+  const dots         = $$("#stepDots .dot");
+  const formMsg      = $("#formMsg");
+  const submitBtn    = $("#submitBtn");
+  const saveToast    = $("#saveToast");
+
+  let currentStep = 0;
+  let errorSeq = 0;
+
+  function buildKnowledge() {
+    $("#knowledge").innerHTML = KNOWLEDGE.map((k, i) => {
+      const req = CONFIG.requireKnowledge ? ` data-req="Statement ${i + 1}"` : "";
+      return `
+        <fieldset class="q"${req} role="radiogroup">
+          <legend class="q-label">
+            ${i + 1}. ${esc(k.text)}
+            ${CONFIG.requireKnowledge ? '<span class="req" aria-label="required">*</span>' : ""}
+          </legend>
+          <div class="choices">
+            <label class="choice">
+              <input type="radio" name="${k.id}" value="True">
+              <span class="marker" aria-hidden="true"></span>
+              <span class="choice-text">True</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="${k.id}" value="False">
+              <span class="marker" aria-hidden="true"></span>
+              <span class="choice-text">False</span>
+            </label>
+          </div>
+        </fieldset>`;
+    }).join("");
+  }
+
+  function choiceGroup(name, legend, options) {
+    return `
+      <fieldset class="q" data-req="${esc(legend)}">
+        <legend class="q-label">
+          ${esc(legend)}
+          <span class="req" aria-label="required">*</span>
+        </legend>
+        <div class="choices">
+          ${options.map((o) => `
+            <label class="choice">
+              <input type="radio" name="${name}" value="${esc(o)}">
+              <span class="marker" aria-hidden="true"></span>
+              <span class="choice-text">${esc(o)}</span>
+            </label>
+          `).join("")}
+        </div>
+      </fieldset>`;
+  }
+
+  function buildSubstances() {
+    $("#substances").innerHTML = SUBSTANCES.map((s, i) => `
+      <div class="substance" data-sub="${s.id}">
+        <div class="substance-head">
+          <span class="substance-num" aria-hidden="true">${i + 1}</span>
+          <div class="substance-name">
+            ${esc(s.name)}
+            <span class="substance-eg">${esc(s.eg)}</span>
+          </div>
+        </div>
+        ${choiceGroup(`${s.id}_c1`, "Have you ever used it in your lifetime?", ["Yes", "No"])}
+        <div class="substance-detail" hidden>
+          ${choiceGroup(`${s.id}_c2`, "Have you used it in the past 12 months?", ["Yes", "No"])}
+          ${choiceGroup(`${s.id}_c3`, "Have you used it in the past 30 days?", ["Yes", "No"])}
+          ${choiceGroup(`${s.id}_c4`, "How often do you typically use it?", FREQ)}
+          ${choiceGroup(`${s.id}_c5`, "Primary reason for use:", REASONS)}
+        </div>
+      </div>`
+    ).join("");
+  }
+
+  function buildLikert() {
+    $("#likert").innerHTML = ATTITUDES.map((st, idx) => {
+      const name = `att${idx + 1}`;
+      const req = CONFIG.requireAttitudes ? ` data-req="Statement ${idx + 1}"` : "";
+      return `
+        <fieldset class="q likert-item"${req} role="radiogroup">
+          <legend class="sr-only">Statement ${idx + 1}: ${esc(st)}</legend>
+          <div class="likert-statement">
+            ${idx + 1}. ${esc(st)}
+            ${CONFIG.requireAttitudes ? '<span class="req" aria-label="required">*</span>' : ""}
+          </div>
+          <div class="likert-scale">
+            ${[1, 2, 3, 4, 5].map((v) => `
+              <label class="choice">
+                <input type="radio" name="${name}" value="${v}"
+                       aria-label="${v} of 5, ${["strongly disagree","disagree","neutral","agree","strongly agree"][v-1]}">
+                <span class="face" aria-hidden="true">${FACES[v - 1]}</span>
+                <span class="choice-text">${v}</span>
+              </label>
+            `).join("")}
+          </div>
+        </fieldset>`;
+    }).join("");
+  }
+
+  function wireSkipLogic() {
+    $$(".substance").forEach((block) => {
+      const id = block.dataset.sub;
+      const detail = $(".substance-detail", block);
+      $$(`input[name="${id}_c1"]`, block).forEach((r) => {
+        r.addEventListener("change", () => {
+          const yes = $(`input[name="${id}_c1"]:checked`, block)?.value === "Yes";
+          detail.hidden = !yes;
+          if (!yes) {
+            $$(`input[type="radio"]`, detail).forEach((i) => { i.checked = false; });
+            $$(".invalid", detail).forEach((el) => el.classList.remove("invalid"));
+            $$(".error", detail).forEach((el) => el.remove());
+          }
+          saveDraft();
+        });
+      });
+    });
+  }
+
+  function renderStep() {
+    stepNow.textContent = String(currentStep + 1);
+    dots.forEach((d, i) => {
+      d.classList.toggle("done",    i < currentStep);
+      d.classList.toggle("current", i === currentStep);
+    });
+  }
+
+  function goToStep(i, { focus = true } = {}) {
+    currentStep = Math.max(0, Math.min(steps.length - 1, i));
+    steps.forEach((s, idx) => s.classList.toggle("active", idx === currentStep));
+    renderStep();
+    if (currentStep === steps.length - 1) buildReview();
+    if (focus) {
+      document.querySelector(".app-bar").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function clearErrors(step) {
+    $$(".invalid", step).forEach((el) => el.classList.remove("invalid"));
+    $$(".error", step).forEach((el) => el.remove());
+    $$('[aria-invalid]', step).forEach((el) => el.removeAttribute("aria-invalid"));
+  }
+
+  function attachError(q, message) {
+    q.classList.add("invalid");
+    const id = `err-${++errorSeq}`;
+    const err = document.createElement("div");
+    err.className = "error";
+    err.id = id;
+    err.setAttribute("role", "alert");
+    err.innerHTML = `${errIcon}<span>${esc(message)}</span>`;
+    q.appendChild(err);
+    const firstField = q.querySelector("input, textarea");
+    if (firstField) {
+      const existing = firstField.getAttribute("aria-describedby");
+      firstField.setAttribute("aria-describedby",
+        existing ? `${existing} ${id}` : id);
+      firstField.setAttribute("aria-invalid", "true");
+    }
+  }
+
+  function validateStep(step) {
+    clearErrors(step);
+    let firstBad = null;
+    $$("[data-req]", step).forEach((q) => {
+      if (q.closest("[hidden]")) return;
+      const radios = $$('input[type="radio"]', q);
+      const checks = $$('input[type="checkbox"]', q);
+      const fields = $$('input[type="text"], textarea', q);
+      let filled = true;
+      if (radios.length)      filled = radios.some((r) => r.checked);
+      else if (checks.length) filled = checks.some((c) => c.checked);
+      else if (fields.length) filled = fields.some((f) => f.value.trim() !== "");
+      if (!filled) {
+        attachError(q, "Please choose an answer.");
+        if (!firstBad) firstBad = q;
+      }
+    });
+    return firstBad;
+  }
+
+  function focusFirstError(step, q) {
+    if (!q) return;
+    goToStep(steps.indexOf(step), { focus: false });
+    requestAnimationFrame(() => {
+      q.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => {
+        const field = q.querySelector("input, textarea");
+        if (field) field.focus({ preventScroll: true });
+      }, 350);
+    });
+  }
+
+  function buildReview() {
+    const fd = new FormData(form);
+    const data = Object.fromEntries(fd.entries());
+    data.consent = $("#consent").checked;
+
+    const sections = [];
+
+    const demo = [
+      ["Age", data.age], ["Gender", data.gender],
+      ["Year of study", data.year], ["Residence", data.residence],
+    ].filter(([, v]) => v);
+    if (demo.length) sections.push(["About you", demo]);
+
+    const know = KNOWLEDGE
+      .map((k, i) => [`Question ${i + 1}`, data[k.id] || "—"])
+      .filter(([, v]) => v && v !== "—");
+    if (know.length) sections.push(["Knowledge", know]);
+
+    SUBSTANCES.forEach((s) => {
+      const c1 = data[`${s.id}_c1`];
+      if (!c1) return;
+      const rows = [["Ever used", c1]];
+      if (c1 === "Yes") {
+        rows.push(["Past 12 months", data[`${s.id}_c2`] || "—"]);
+        rows.push(["Past 30 days",   data[`${s.id}_c3`] || "—"]);
+        rows.push(["Frequency",      data[`${s.id}_c4`] || "—"]);
+        rows.push(["Reason",         data[`${s.id}_c5`] || "—"]);
+      }
+      sections.push([s.name, rows]);
+    });
+
+    const att = ATTITUDES
+      .map((_, i) => [`Statement ${i + 1}`, data[`att${i + 1}`] || "—"])
+      .filter(([, v]) => v && v !== "—");
+    if (att.length) sections.push(["Attitudes", att]);
+
+    if (data.perceived_effects) {
+      sections.push(["Effects", [["Your words", data.perceived_effects]]]);
+    }
+    if (data.other_substance) {
+      sections.push(["Other substance", [["Details", data.other_substance]]]);
+    }
+
+    $("#review").innerHTML = sections.map(([title, rows]) => `
+      <div class="review-section">
+        <h3 class="review-title">${esc(title)}</h3>
+        <dl class="review-list">
+          ${rows.map(([k, v]) => `
+            <div class="review-row">
+              <dt>${esc(k)}</dt>
+              <dd>${esc(v)}</dd>
+            </div>
+          `).join("")}
+        </dl>
+      </div>
+    `).join("");
+  }
+
+  let saveTimer = null;
+  let saveToastTimer = null;
+
+  function flashToast() {
+    saveToast.classList.add("show");
+    clearTimeout(saveToastTimer);
+    saveToastTimer = setTimeout(() => saveToast.classList.remove("show"), 1400);
+  }
+
+  function saveDraft() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      try {
+        const fd = new FormData(form);
+        const data = Object.fromEntries(fd.entries());
+        data.consent = $("#consent").checked;
+        localStorage.setItem(CONFIG.autosaveKey, JSON.stringify(data));
+        flashToast();
+      } catch {}
+    }, 500);
+  }
+
+  function restoreDraft() {
+    let raw;
+    try { raw = localStorage.getItem(CONFIG.autosaveKey); } catch { return; }
+    if (!raw) return;
+    let data;
+    try { data = JSON.parse(raw); } catch { return; }
+
+    Object.entries(data).forEach(([name, value]) => {
+      if (name === "consent") {
+        const cb = $("#consent");
+        if (cb) cb.checked = !!value;
+        return;
+      }
+      $$(`[name="${CSS.escape(name)}"]`, form).forEach((el) => {
+        if (el.type === "radio")         el.checked = el.value === value;
+        else if (el.type === "checkbox") el.checked = !!value;
+        else                             el.value = value;
+      });
+    });
+
+    $$(".substance").forEach((block) => {
+      const id = block.dataset.sub;
+      const checked = $(`input[name="${id}_c1"]:checked`, block);
+      if (checked) checked.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  }
+
+  function wireForm() {
+    form.addEventListener("input", saveDraft);
+    form.addEventListener("change", saveDraft);
+    form.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+        e.preventDefault();
+      }
+    });
+
+    $$("[data-next]", form).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const bad = validateStep(steps[currentStep]);
+        if (bad) { focusFirstError(steps[currentStep], bad); return; }
+        goToStep(currentStep + 1);
+      });
+    });
+
+    $$("[data-prev]", form).forEach((btn) => {
+      btn.addEventListener("click", () => goToStep(currentStep - 1));
+    });
+
+    const exitConfirm = () => {
+      if (confirm("Exit the survey? Your saved progress will remain on this device.")) {
+        window.location.href = "about:blank";
+      }
+    };
+    $("#exitBtn").addEventListener("click", exitConfirm);
+    $("#exitBtn2").addEventListener("click", exitConfirm);
+  }
+
+  async function submitSurvey() {
+    for (let i = 0; i < steps.length - 1; i++) {
+      const bad = validateStep(steps[i]);
+      if (bad) {
+        focusFirstError(steps[i], bad);
+        setFormMessage("Please complete the highlighted question.", "error");
+        return;
+      }
+    }
+
+    submitBtn.disabled = true;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.textContent = "Submitting…";
+    setFormMessage("");
+
+    const fd = new FormData(form);
+    const payload = Object.fromEntries(fd.entries());
+    payload.consent = $("#consent").checked;
+
+    try {
+      const res  = await fetch("/api/submit", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) throw new Error(json.error || "Submission failed.");
+
+      try { localStorage.removeItem(CONFIG.autosaveKey); } catch {}
+      form.hidden = true;
+      $(".app-bar").hidden = true;
+      $("#doneScreen").hidden = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+      setFormMessage(err.message || "Something went wrong. Please try again.", "error");
+    }
+  }
+
+  function setFormMessage(text, kind) {
+    formMsg.textContent = text || "";
+    formMsg.style.color = kind === "error" ? "var(--err)" : "";
+  }
+
+  function init() {
+    buildKnowledge();
+    buildSubstances();
+    buildLikert();
+    wireSkipLogic();
+    wireForm();
+    submitBtn.addEventListener("click", submitSurvey);
+    restoreDraft();
+    goToStep(0, { focus: false });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

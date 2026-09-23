@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F0FDF4">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Admin dashboard — Plant Stimulant Use Survey, KMTC Nakuru.">
+<title>Admin – Plant Stimulant Survey</title>
+<style>
+  /* =========================================================================
+     TOKENS — matches index.html
+     ========================================================================= */
+  :root {
+    --g50:  #F0FDF4;
+    --g100: #DCFCE7;
+    --g200: #BBF7D0;
+    --g300: #86EFAC;
+    --g400: #4ADE80;
+    --g500: #22C55E;
+    --g600: #16A34A;
+    --g700: #15803D;
+    --g800: #166534;
+    --g900: #14532D;
+    --g950: #052E16;
+
+    --ink:   #0F1F17;
+    --body:  #4B5563;
+    --muted: #6B7280;
+    --faint: #9CA3AF;
+
+    --bg:        #F0FDF4;
+    --surface:   #FFFFFF;
+    --surface-2: #F9FAFB;
+
+    --line:   #DCFCE7;
+    --line-2: #E5E7EB;
+
+    --err:      #DC2626;
+    --err-soft: #FEF2F2;
+    --ok:       #16A34A;
+
+    --ring: rgba(22, 101, 52, .16);
+
+    --r-sm: 10px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 24px;
+
+    --shadow-sm: 0 1px 2px rgba(6, 46, 22, .04);
+    --shadow-md: 0 4px 16px rgba(6, 46, 22, .06);
+    --shadow-lg: 0 12px 32px rgba(6, 46, 22, .10);
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Helvetica Neue', Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--body);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-left:  env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 { color: var(--ink); margin: 0; line-height: 1.25; }
+  p { margin: 0; }
+  button { font: inherit; }
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      transition-duration: .01ms !important;
+    }
+  }
+
+  /* =========================================================================
+     SKIP LINK
+     ========================================================================= */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 20px;
+    z-index: 1000;
+    background: var(--g800);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: var(--r-md);
+    font-weight: 600;
+    text-decoration: none;
+    transition: top .2s;
+  }
+  .skip-link:focus { top: 12px; }
+
+  /* =========================================================================
+     APP BAR
+     ========================================================================= */
+  .app-bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(240, 253, 244, .94);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    padding-top: env(safe-area-inset-top);
+    border-bottom: 1px solid var(--line);
+  }
+  .app-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .brand-mark {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--g100);
+    color: var(--g800);
+    display: grid;
+    place-items: center;
+  }
+  .brand-text { min-width: 0; }
+  .brand-name {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    letter-spacing: -.01em;
+  }
+  .brand-sub {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+  @media (max-width: 480px) {
+    .brand-sub { display: none; }
+  }
+
+  /* =========================================================================
+     BUTTONS
+     ========================================================================= */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 11px 18px;
+    border: 1.5px solid transparent;
+    border-radius: var(--r-md);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, border-color .15s, box-shadow .15s, transform .06s;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    letter-spacing: -.005em;
+  }
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn svg { flex-shrink: 0; }
+
+  .btn-primary {
+    background: var(--g800);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(22, 101, 52, .22);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--g900);
+    box-shadow: 0 6px 18px rgba(22, 101, 52, .28);
+  }
+
+  .btn-ghost {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--line-2);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--g50);
+    border-color: var(--g200);
+  }
+
+  .btn-soft {
+    background: var(--g100);
+    color: var(--g900);
+    border-color: transparent;
+  }
+  .btn-soft:hover:not(:disabled) {
+    background: var(--g200);
+  }
+
+  .btn-icon {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 0;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid transparent;
+  }
+  .btn-icon:hover { background: var(--g100); color: var(--g800); }
+
+  .btn-lg {
+    min-height: 52px;
+    padding: 15px 24px;
+    font-size: 15.5px;
+  }
+
+  /* =========================================================================
+     MAIN
+     ========================================================================= */
+  main {
+    padding: 24px 20px calc(60px + env(safe-area-inset-bottom));
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* =========================================================================
+     LOADING
+     ========================================================================= */
+  .loading-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 80px 20px;
+    text-align: center;
+  }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--g100);
+    border-top-color: var(--g800);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { color: var(--muted); font-size: 14px; }
+
+  /* =========================================================================
+     LOGIN
+     ========================================================================= */
+  .login-card {
+    background: var(--surface);
+    border-radius: var(--r-xl);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-md);
+    max-width: 420px;
+    margin: 24px auto 0;
+  }
+  .login-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-md);
+    background: var(--g100);
+    color: var(--g800);
+    display: grid;
+    place-items: center;
+    margin-bottom: 22px;
+  }
+  .login-card h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    letter-spacing: -.022em;
+  }
+  .login-card .sub {
+    color: var(--muted);
+    font-size: 14.5px;
+    margin-bottom: 26px;
+    line-height: 1.5;
+  }
+
+  .field { margin-bottom: 20px; }
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .field-hint {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .input, .select {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 16px;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-md);
+    transition: border-color .15s, box-shadow .15s, background .15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .input::placeholder { color: var(--faint); opacity: 1; }
+  .input:hover, .select:hover { background: #F3F4F6; }
+  .input:focus, .select:focus {
+    outline: none;
+    background: var(--surface);
+    border-color: var(--g800);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--err);
+    background: var(--err-soft);
+  }
+
+  .select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 42px;
+  }
+
+  .msg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    font-weight: 500;
+    min-height: 20px;
+    margin-top: 14px;
+    line-height: 1.4;
+  }
+  .msg.err { color: var(--err); }
+  .msg.ok  { color: var(--ok); }
+
+  /* =========================================================================
+     STATS
+     ========================================================================= */
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .stat-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background: var(--g100);
+    color: var(--g800);
+    display: grid;
+    place-items: center;
+  }
+  .stat-body { min-width: 0; flex: 1; }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -.025em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-top: 4px;
+  }
+  .stat-extra {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .stat-num-sm {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.015em;
+    line-height: 1.25;
+  }
+
+  /* =========================================================================
+     FILTERS
+     ========================================================================= */
+  .filters {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .filters > summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 22px;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    user-select: none;
+  }
+  .filters > summary::-webkit-details-marker { display: none; }
+  .filters > summary:hover { background: var(--g50); }
+  .filters > summary .chev {
+    transition: transform .2s;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .filters[open] > summary .chev { transform: rotate(180deg); }
+  .filters > summary svg:first-child { color: var(--g800); }
+  .filter-count {
+    background: var(--g800);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 999px;
+    margin-left: 4px;
+  }
+  .filter-body {
+    padding: 0 22px 22px;
+    border-top: 1px solid var(--line);
+  }
+  .filter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-top: 18px;
+  }
+  .filter-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 18px;
+    margin-top: 4px;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .filter-actions .btn { flex: 1 1 auto; min-height: 46px; }
+
+  /* =========================================================================
+     TOOLBAR
+     ========================================================================= */
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .toolbar .count-info {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: auto;
+    flex: 1 1 100%;
+    margin-bottom: 4px;
+  }
+  .toolbar .count-info strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  @media (min-width: 720px) {
+    .toolbar .count-info { flex: 0 1 auto; margin-bottom: 0; }
+  }
+
+  /* =========================================================================
+     RESULTS
+     ========================================================================= */
+  .results-container {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .table-wrap { overflow-x: auto; }
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    min-width: 780px;
+  }
+  .tbl thead th {
+    position: sticky;
+    top: 0;
+    background: var(--g50);
+    color: var(--g900);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .tbl tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    color: var(--body);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .tbl tbody tr:last-child td { border-bottom: 0; }
+  .tbl tbody tr {
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .tbl tbody tr:hover { background: var(--g50); }
+  .tbl tbody tr:focus-within { background: var(--g50); }
+  .tbl .cell-num { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 500; }
+  .tbl .cell-actions { text-align: right; width: 80px; }
+
+  .tbl .view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    padding: 6px 12px;
+    background: var(--g100);
+    color: var(--g900);
+    border: 0;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .tbl .view-btn:hover { background: var(--g200); }
+  .tbl .view-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+
+  .badge-yes, .badge-no, .badge-na {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: .01em;
+  }
+  .badge-yes {
+    background: var(--g100);
+    color: var(--g900);
+  }
+  .badge-no {
+    background: var(--surface-2);
+    color: var(--muted);
+  }
+  .badge-na {
+    background: var(--surface-2);
+    color: var(--faint);
+  }
+
+  /* Mobile cards */
+  .card-list {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .card-list li { border-bottom: 1px solid var(--line); }
+  .card-list li:last-child { border-bottom: 0; }
+
+  .resp-card {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .12s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .resp-card:hover { background: var(--g50); }
+  .resp-card:focus-visible {
+    outline: none;
+    background: var(--g50);
+    box-shadow: inset 0 0 0 2px var(--g800);
+  }
+
+  .resp-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .resp-card-time {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.005em;
+  }
+  .resp-card-arrow {
+    color: var(--g500);
+    flex-shrink: 0;
+  }
+  .resp-card-meta {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    line-height: 1.5;
+  }
+  .resp-card-meta strong { color: var(--ink); font-weight: 600; }
+  .resp-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .resp-card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    color: var(--muted);
+    background: var(--surface-2);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .resp-card-tag.on {
+    color: var(--g900);
+    background: var(--g100);
+  }
+
+  /* =========================================================================
+     PAGER
+     ========================================================================= */
+  .pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 22px;
+    border-top: 1px solid var(--line);
+    background: var(--g50);
+    font-size: 13.5px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .pager-info { font-weight: 500; }
+  .pager-info strong { color: var(--ink); font-weight: 700; }
+  .pager-ctrls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pager-ctrls .btn { min-height: 40px; padding: 9px 14px; font-size: 13px; }
+
+  /* =========================================================================
+     EMPTY
+     ========================================================================= */
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 72px 20px;
+    color: var(--muted);
+  }
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--g100);
+    display: grid;
+    place-items: center;
+    color: var(--g800);
+    margin-bottom: 18px;
+  }
+  .empty h3 {
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -.01em;
+  }
+  .empty p {
+    font-size: 14px;
+    max-width: 340px;
+    margin-bottom: 20px;
+    line-height: 1.55;
+  }
+
+  /* =========================================================================
+     MODAL
+     ========================================================================= */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 31, 23, .45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: overlayIn .2s ease;
+  }
+  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--surface);
+    width: 100%;
+    max-width: 720px;
+    max-height: 92vh;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    display: flex;
+    flex-direction: column;
+    animation: sheetUp .28s cubic-bezier(.2,.8,.2,1);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  @keyframes sheetUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+
+  .modal-grip {
+    flex-shrink: 0;
+    width: 40px;
+    height: 4px;
+    background: var(--g200);
+    border-radius: 999px;
+    margin: 12px auto 0;
+  }
+
+  .modal-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .modal-title { flex: 1; min-width: 0; }
+  .modal-title h3 {
+    font-size: 19px;
+    letter-spacing: -.015em;
+  }
+  .modal-meta {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+    line-height: 1.5;
+  }
+  .modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sec-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--g700);
+    margin: 24px 0 12px;
+  }
+  .sec-title:first-child { margin-top: 0; }
+
+  .kv { display: grid; gap: 6px; }
+  .kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+  }
+  .kv-row dt { color: var(--muted); font-weight: 400; flex-shrink: 0; }
+  .kv-row dd {
+    margin: 0;
+    color: var(--ink);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .modal .substance {
+    background: var(--g50);
+    border-radius: var(--r-md);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .modal .substance h4 {
+    font-size: 14px;
+    color: var(--g900);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .modal .substance .kv-row { background: var(--surface); }
+
+  .modal-free-text {
+    padding: 16px;
+    background: var(--surface-2);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--body);
+    line-height: 1.6;
+  }
+
+  /* =========================================================================
+     TOAST
+     ========================================================================= */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translateX(-50%) translateY(calc(100% + 24px));
+    z-index: 300;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 32px);
+    padding: 11px 20px;
+    background: var(--ink);
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 999px;
+    box-shadow: var(--shadow-lg);
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .25s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  .toast.err { background: var(--err); }
+  .toast.ok  { background: var(--g900); }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* =========================================================================
+     ≥720px
+     ========================================================================= */
+  @media (min-width: 720px) {
+    main { padding: 32px 24px calc(80px + env(safe-area-inset-bottom)); }
+    .app-bar-inner { padding: 16px 24px; }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .filter-grid { grid-template-columns: repeat(3, 1fr); }
+    .filter-actions { justify-content: flex-end; }
+    .filter-actions .btn { flex: 0 0 auto; }
+    .filters > summary { display: none; }
+    .filter-body { border-top: 0; padding-top: 0; }
+    .filter-grid { padding-top: 22px; }
+    .table-wrap { display: block; }
+    .card-list  { display: none !important; }
+    .overlay { align-items: center; padding: 40px; }
+    .modal {
+      border-radius: var(--r-xl);
+      max-height: 86vh;
+      animation: dialogIn .22s cubic-bezier(.2,.8,.2,1);
+      padding-bottom: 0;
+    }
+    @keyframes dialogIn {
+      from { transform: scale(.97); opacity: 0; }
+      to   { transform: none; opacity: 1; }
+    }
+    .modal-grip { display: none; }
+  }
+
+  @media (min-width: 1024px) {
+    .stats { grid-template-columns: repeat(4, 1fr); }
+    .filter-grid { grid-template-columns: repeat(5, 1fr); }
+    .stat { padding: 22px; }
+  }
+
+  @media (max-width: 719px) {
+    .table-wrap { display: none !important; }
+    .card-list  { display: block; }
+    .filter-grid { grid-template-columns: 1fr; }
+    .login-card { padding: 28px 22px; }
+  }
+
+  @media (max-width: 380px) {
+    .stat { padding: 16px; }
+    .stat-icon { width: 40px; height: 40px; }
+    .stat-num { font-size: 24px; }
+  }
+
+  @media (forced-colors: active) {
+    .btn, .input, .select, .stat, .filters, .results-container, .login-card {
+      border: 1px solid ButtonBorder;
+    }
+    .btn-primary { background: Highlight; color: HighlightText; }
+    .badge-yes   { background: Highlight; color: HighlightText; }
+  }
+
+    /* =========================================================================
+     ADMIN FOOTER — system credit
+     ========================================================================= */
+  .admin-footer {
+    margin-top: 40px;
+    padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .admin-footer .credit-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px 10px;
+    margin-bottom: 6px;
+  }
+  .admin-footer .credit-line:last-child { margin-bottom: 0; }
+  .admin-footer .sep {
+    color: var(--faint);
+    user-select: none;
+  }
+  .admin-footer strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .admin-footer .system-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--g100);
+    color: var(--g800);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .admin-footer .system-tag svg { flex-shrink: 0; }
+  .admin-footer a {
+    color: var(--g800);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid var(--g200);
+    padding-bottom: 1px;
+    transition: border-color .15s;
+  }
+  .admin-footer a:hover { border-bottom-color: var(--g800); 
+  
+  }
+
+
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="app-bar">
+  <div class="app-bar-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="M3 3v18h18"/>
+          <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Survey Admin</span>
+        <span class="brand-sub">Plant Stimulant Use · KMTC Nakuru</span>
+      </div>
+    </div>
+    <button type="button" class="btn btn-soft" id="logoutBtn" hidden>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      <span>Sign out</span>
+    </button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <section id="loadingView" aria-live="polite">
+    <div class="loading-wrap">
+      <div class="spinner" role="status" aria-label="Loading"></div>
+      <p class="loading-text">Checking your session…</p>
+    </div>
+  </section>
+
+  <section id="loginView" hidden>
+    <div class="login-card">
+      <div class="login-icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h2>Sign in</h2>
+      <p class="sub">Enter the administrator password</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label class="field-label" for="pw">Password</label>
+          <input class="input" type="password" id="pw" name="password"
+                 autocomplete="current-password" placeholder="••••••••"
+                 spellcheck="false" required aria-describedby="pw-hint">
+          <span class="field-hint" id="pw-hint">
+            Contact Brian if you've lost this.
+          </span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="loginBtn"
+                style="width:100%;">
+          Sign in
+        </button>
+        <p class="msg" id="loginMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="dashView" hidden>
+
+    <div class="stats" id="stats" aria-label="Summary statistics"></div>
+
+    <details class="filters" id="filters" open>
+      <summary>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+        <span>Filters</span>
+        <span class="filter-count" id="filterCount" hidden>0</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </summary>
+      <div class="filter-body">
+        <div class="filter-grid">
+          <div class="field" style="margin:0;">
+            <label class="field-label" for="fFrom">From date</label>
+            <input class="input" type="date" id="fFrom">
+          </div>
+          <div class="field" style="margin:0;">
+            <label class="field-label" for="fTo">To date</label>
+            <input class="input" type="date" id="fTo">
+          </div>
+          <div class="field" style="margin:0;">
+            <label class="field-label" for="fGender">Gender</label>
+            <select class="select" id="fGender">
+              <option value="">All genders</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0;">
+            <label class="field-label" for="fYear">Year</label>
+            <select class="select" id="fYear">
+              <option value="">All years</option>
+              <option value="Year 1">Year 1</option>
+              <option value="Year 2">Year 2</option>
+              <option value="Year 3">Year 3</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0;">
+            <label class="field-label" for="fKhat">Khat use</label>
+            <select class="select" id="fKhat">
+              <option value="">All respondents</option>
+              <option value="yes">Ever used</option>
+              <option value="no">Never used</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button type="button" class="btn btn-ghost" id="resetBtn">Reset filters</button>
+          <button type="button" class="btn btn-primary" id="applyBtn">Apply</button>
+        </div>
+      </div>
+    </details>
+
+    <div class="toolbar">
+      <div class="count-info" id="countInfo" aria-live="polite">Loading…</div>
+      <button type="button" class="btn btn-soft" id="csvBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>CSV</span>
+      </button>
+      <button type="button" class="btn btn-soft" id="xlsxBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="19"/>
+          <line x1="15" y1="13" x2="9" y2="19"/>
+        </svg>
+        <span>Excel</span>
+      </button>
+      <button type="button" class="btn btn-soft" id="pdfBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        <span>PDF</span>
+      </button>
+      <button type="button" class="btn btn-soft" id="refreshBtn" aria-label="Refresh data">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="results-container">
+      <div class="table-wrap" id="tableWrap">
+        <table class="tbl" id="tbl">
+          <caption class="sr-only">
+            Survey responses, most recent first. Select "View" in any row
+            to see the full response.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Submitted</th>
+              <th scope="col">Age</th>
+              <th scope="col">Gender</th>
+              <th scope="col">Year</th>
+              <th scope="col">Residence</th>
+              <th scope="col">Khat ever</th>
+              <th scope="col">Khat 30d</th>
+              <th scope="col">Caffeine ever</th>
+              <th scope="col" class="cell-actions">
+                <span class="sr-only">Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="tbodyTable"></tbody>
+        </table>
+      </div>
+
+      <ul class="card-list" id="cardList" aria-label="Survey responses"></ul>
+
+      <div class="empty" id="emptyState" hidden>
+        <div class="empty-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h3 id="emptyTitle">No responses yet</h3>
+        <p id="emptyBody">Responses will appear here as soon as students begin submitting the survey.</p>
+        <button type="button" class="btn btn-ghost" id="emptyResetBtn" hidden>Clear filters</button>
+      </div>
+
+      <div class="pager" id="pager" hidden>
+        <span class="pager-info" id="pagerInfo"></span>
+        <div class="pager-ctrls">
+          <button type="button" class="btn btn-ghost" id="prevBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            <span>Prev</span>
+          </button>
+          <button type="button" class="btn btn-ghost" id="nextBtn">
+            <span>Next</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-grip" aria-hidden="true"></div>
+    <div class="modal-head">
+      <div class="modal-title">
+        <h3 id="modalTitle">Response detail</h3>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button type="button" class="btn btn-icon" id="modalClose" aria-label="Close dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastText"></span>
+</div>
+
+
+  <footer class="admin-footer" id="adminFooter" hidden>
+    <div class="credit-line">
+      <span class="system-tag">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="3" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <polyline points="16 18 22 12 16 6"/>
+          <polyline points="8 6 2 12 8 18"/>
+        </svg>
+        System v1.0
+      </span>
+      <span class="sep">·</span>
+      <span>Built for <strong>Denis Mwangi</strong> (D/PHARM/24021/585)</span>
+    </div>
+
+    <div class="credit-line">
+      <span>Developed by <strong>Hyper Brains Solutions</strong></span>
+      <span class="sep">·</span>
+      <span>
+        <a href="mailto:you@example.com">bmigate254@gmail.com</a>
+      </span>
+    </div>
+
+    <div class="credit-line">
+      <span style="color:var(--faint);">© 2026 · All rights reserved</span>
+    </div>
+  </footer>
+
+
+<script>
+(function () {
+  "use strict";
+
+  const state = {
+    page: 1,
+    limit: 25,
+    items: [],
+    stats: null,
+    filter: null,
+    currentFilters: {},
+    lastFocused: null,
+  };
+
+  const itemCache = new Map();
+
+  const $ = (id) => document.getElementById(id);
+  const el = {
+    loadingView: $("loadingView"),
+    loginView:   $("loginView"),
+    dashView:    $("dashView"),
+    loginForm:   $("loginForm"),
+    loginBtn:    $("loginBtn"),
+    loginMsg:    $("loginMsg"),
+    pw:          $("pw"),
+    logoutBtn:   $("logoutBtn"),
+    stats:       $("stats"),
+    filters:     $("filters"),
+    filterCount: $("filterCount"),
+    fFrom:       $("fFrom"),
+    fTo:         $("fTo"),
+    fGender:     $("fGender"),
+    fYear:       $("fYear"),
+    fKhat:       $("fKhat"),
+    applyBtn:    $("applyBtn"),
+    resetBtn:    $("resetBtn"),
+    countInfo:   $("countInfo"),
+    csvBtn:      $("csvBtn"),
+    xlsxBtn:     $("xlsxBtn"),
+    pdfBtn:      $("pdfBtn"),
+    refreshBtn:  $("refreshBtn"),
+    tbodyTable:  $("tbodyTable"),
+    cardList:    $("cardList"),
+    tableWrap:   $("tableWrap"),
+    emptyState:  $("emptyState"),
+    emptyTitle:  $("emptyTitle"),
+    emptyBody:   $("emptyBody"),
+    emptyReset:  $("emptyResetBtn"),
+    pager:       $("pager"),
+    pagerInfo:   $("pagerInfo"),
+    prevBtn:     $("prevBtn"),
+    nextBtn:     $("nextBtn"),
+    overlay:     $("overlay"),
+    modalTitle:  $("modalTitle"),
+    modalMeta:   $("modalMeta"),
+    modalBody:   $("modalBody"),
+    modalClose:  $("modalClose"),
+    toast:       $("toast"),
+    toastText:   $("toastText"),
+  };
+
+  const escapeHtml = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
+
+  const fmtDate = (iso) => {
+    if (!iso) return "—";
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, {
+      year: "numeric", month: "short", day: "numeric",
+    }) + " · " + d.toLocaleTimeString(undefined, {
+      hour: "2-digit", minute: "2-digit",
+    });
+  };
+
+  const relTime = (iso) => {
+    if (!iso) return "—";
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1)  return "just now";
+    if (m < 60) return `${m} min ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h} hr ago`;
+    const d = Math.floor(h / 24);
+    return `${d} day${d === 1 ? "" : "s"} ago`;
+  };
+
+  const yesNoBadge = (v) => {
+    if (v === "Yes") return '<span class="badge-yes">Yes</span>';
+    if (v === "No")  return '<span class="badge-no">No</span>';
+    return '<span class="badge-na">—</span>';
+  };
+
+  const caffeineEver = (sub = {}) => {
+    const set = ["coffee", "tea", "energy"];
+    if (set.some((s) => sub[s] && sub[s].c1 === "Yes")) return "Yes";
+    if (set.some((s) => sub[s] && sub[s].c1 === "No"))  return "No";
+    return null;
+  };
+
+  let toastTimer;
+  function showToast(text, kind = "") {
+    el.toastText.textContent = text;
+    el.toast.className = "toast show" + (kind ? " " + kind : "");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      el.toast.className = "toast" + (kind ? " " + kind : "");
+    }, 2400);
+  }
+
+  function showView(view) {
+    el.loadingView.hidden = view !== "loading";
+    el.loginView.hidden   = view !== "login";
+    el.dashView.hidden    = view !== "dash";
+    el.logoutBtn.hidden   = view !== "dash";
+    const footer = document.getElementById("adminFooter");
+    if (footer) footer.hidden = view !== "dash";
+    if (view === "login") setTimeout(() => el.pw.focus(), 60);
+  }
+
+  async function checkSession() {
+    try {
+      const r = await fetch("/api/admin/me", { credentials: "same-origin" });
+      const j = await r.json();
+      if (j.admin) { showView("dash"); loadResponses(); }
+      else          showView("login");
+    } catch {
+      showView("login");
+    }
+  }
+
+  function setLoginMsg(text, kind = "") {
+    el.loginMsg.textContent = text;
+    el.loginMsg.className = "msg" + (kind ? " " + kind : "");
+  }
+
+  el.loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const password = el.pw.value;
+    if (!password) {
+      setLoginMsg("Please enter the password.", "err");
+      el.pw.focus();
+      return;
+    }
+    el.loginBtn.disabled = true;
+    el.loginBtn.textContent = "Signing in…";
+    setLoginMsg("");
+
+    try {
+      const r = await fetch("/api/admin/login", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const j = await r.json();
+      if (!r.ok || !j.ok) throw new Error(j.error || "Login failed.");
+      el.pw.value = "";
+      showView("dash");
+      loadResponses();
+    } catch (err) {
+      setLoginMsg(err.message || "Login failed.", "err");
+      el.pw.focus();
+    } finally {
+      el.loginBtn.disabled = false;
+      el.loginBtn.textContent = "Sign in";
+    }
+  });
+
+  el.logoutBtn.addEventListener("click", async () => {
+    try {
+      await fetch("/api/admin/logout", {
+        method: "POST", credentials: "same-origin",
+      });
+    } catch {}
+    state.page = 1;
+    resetFilters();
+    showView("login");
+  });
+
+  function readFilters() {
+    const f = {};
+    if (el.fFrom.value)   f.from   = el.fFrom.value;
+    if (el.fTo.value)     f.to     = el.fTo.value;
+    if (el.fGender.value) f.gender = el.fGender.value;
+    if (el.fYear.value)   f.year   = el.fYear.value;
+    if (el.fKhat.value)   f.khat   = el.fKhat.value;
+    return f;
+  }
+
+  function applyFilterState() {
+    const n = Object.keys(state.currentFilters).length;
+    el.filterCount.hidden = n === 0;
+    el.filterCount.textContent = n;
+  }
+
+  function resetFilters() {
+    el.fFrom.value = "";
+    el.fTo.value = "";
+    el.fGender.value = "";
+    el.fYear.value = "";
+    el.fKhat.value = "";
+    state.currentFilters = {};
+    state.page = 1;
+    applyFilterState();
+  }
+
+  el.applyBtn.addEventListener("click", () => {
+    state.currentFilters = readFilters();
+    state.page = 1;
+    applyFilterState();
+    loadResponses();
+    if (window.matchMedia("(max-width: 719px)").matches) {
+      el.filters.open = false;
+    }
+  });
+
+  el.resetBtn.addEventListener("click", () => {
+    resetFilters();
+    loadResponses();
+  });
+
+  el.emptyReset.addEventListener("click", () => {
+    resetFilters();
+    loadResponses();
+  });
+
+  function buildQuery() {
+    const p = new URLSearchParams();
+    p.set("page",  state.page);
+    p.set("limit", state.limit);
+    for (const [k, v] of Object.entries(state.currentFilters)) p.set(k, v);
+    return p.toString();
+  }
+
+  async function loadResponses() {
+    showLoadingRows();
+    try {
+      const r = await fetch("/api/admin/responses?" + buildQuery(), {
+        credentials: "same-origin",
+      });
+      if (r.status === 401) { showView("login"); return; }
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error || "Load failed.");
+
+      state.items  = j.items || [];
+      state.stats  = j.stats;
+      state.filter = j.filter;
+
+      renderStats();
+      renderResults();
+      renderPager();
+      updateCountInfo();
+    } catch (err) {
+      showToast("Could not load responses: " + err.message, "err");
+      renderEmpty("Failed to load", err.message, false);
+    }
+  }
+
+  function showLoadingRows() {
+    el.emptyState.hidden = true;
+    el.pager.hidden = true;
+    el.tbodyTable.innerHTML = Array.from({ length: 5 })
+      .map(() => `<tr><td colspan="9" style="padding:16px;">
+        <div style="height:12px;background:var(--g100);border-radius:6px;
+                    width:100%;"></div>
+      </td></tr>`).join("");
+    el.cardList.innerHTML = "";
+  }
+
+  function renderStats() {
+    const s = state.stats;
+    if (!s) return;
+    el.stats.innerHTML = `
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <div class="stat-num">${s.total_submitted.toLocaleString()}</div>
+          <div class="stat-label">Total submitted</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+               stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <div class="stat-num">${s.today.toLocaleString()}</div>
+          <div class="stat-label">Submitted today</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="M12 2v20M2 12h20"/>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <div class="stat-num">${s.khat_ever_pct}%</div>
+          <div class="stat-label">Khat — ever used</div>
+          <div class="stat-extra">${s.khat_ever} of ${s.total_submitted}</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+               stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <div class="stat-num-sm">
+            ${s.latest ? relTime(s.latest) : "—"}
+          </div>
+          <div class="stat-label" style="margin-top:8px;">Latest submission</div>
+          ${s.latest ? `<div class="stat-extra">${fmtDate(s.latest)}</div>` : ""}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderResults() {
+    const items = state.items;
+    if (!items || !items.length) {
+      const hasFilters = Object.keys(state.currentFilters).length > 0;
+      renderEmpty(
+        hasFilters ? "No matching responses" : "No responses yet",
+        hasFilters
+          ? "Try adjusting or clearing the filters."
+          : "Responses will appear here as soon as students submit the survey.",
+        hasFilters
+      );
+      return;
+    }
+
+    el.emptyState.hidden = true;
+    el.tableWrap.hidden = false;
+
+    el.tbodyTable.innerHTML = items.map((r) => {
+      const sub = r.substances || {};
+      const khat = sub.khat || {};
+      const caff = caffeineEver(sub);
+      return `
+        <tr data-id="${escapeHtml(r.id)}" tabindex="0"
+            aria-label="Response from ${escapeHtml(fmtDate(r.submitted_at))}. Press Enter to view details.">
+          <td class="cell-num">${escapeHtml(fmtDate(r.submitted_at))}</td>
+          <td class="cell-num">${escapeHtml(r.age ?? "—")}</td>
+          <td>${escapeHtml(r.gender || "—")}</td>
+          <td>${escapeHtml(r.year_of_study || "—")}</td>
+          <td>${escapeHtml(r.residence || "—")}</td>
+          <td>${yesNoBadge(khat.c1)}</td>
+          <td>${yesNoBadge(khat.c3)}</td>
+          <td>${yesNoBadge(caff)}</td>
+          <td class="cell-actions">
+            <button type="button" class="view-btn" data-id="${escapeHtml(r.id)}"
+                    aria-label="View response from ${escapeHtml(fmtDate(r.submitted_at))}">
+              View
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </td>
+        </tr>`;
+    }).join("");
+
+    el.cardList.innerHTML = items.map((r) => {
+      const sub = r.substances || {};
+      const khat = sub.khat || {};
+      const caff = caffeineEver(sub);
+      return `
+        <li>
+          <button type="button" class="resp-card" data-id="${escapeHtml(r.id)}"
+                  aria-label="View response from ${escapeHtml(fmtDate(r.submitted_at))}">
+            <div class="resp-card-top">
+              <span class="resp-card-time">${escapeHtml(fmtDate(r.submitted_at))}</span>
+              <svg class="resp-card-arrow" width="16" height="16" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.2"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+            <div class="resp-card-meta">
+              Age <strong>${escapeHtml(r.age ?? "—")}</strong> ·
+              <strong>${escapeHtml(r.gender || "—")}</strong> ·
+              <strong>${escapeHtml(r.year_of_study || "—")}</strong>
+            </div>
+            <div class="resp-card-meta">${escapeHtml(r.residence || "—")}</div>
+            <div class="resp-card-tags">
+              <span class="resp-card-tag ${khat.c1 === "Yes" ? "on" : ""}">
+                Khat ever: ${escapeHtml(khat.c1 || "—")}
+              </span>
+              <span class="resp-card-tag ${khat.c3 === "Yes" ? "on" : ""}">
+                Khat 30d: ${escapeHtml(khat.c3 || "—")}
+              </span>
+              <span class="resp-card-tag ${caff === "Yes" ? "on" : ""}">
+                Caffeine: ${escapeHtml(caff || "—")}
+              </span>
+            </div>
+          </button>
+        </li>`;
+    }).join("");
+
+    itemCache.clear();
+    items.forEach((it) => itemCache.set(it.id, it));
+  }
+
+  function renderEmpty(title, body, showReset) {
+    el.tableWrap.hidden = true;
+    el.cardList.innerHTML = "";
+    el.tbodyTable.innerHTML = "";
+    el.emptyState.hidden = false;
+    el.emptyTitle.textContent = title;
+    el.emptyBody.textContent = body;
+    el.emptyReset.hidden = !showReset;
+    el.pager.hidden = true;
+  }
+
+  function renderPager() {
+    const f = state.filter;
+    if (!f || f.total === 0) { el.pager.hidden = true; return; }
+    el.pager.hidden = false;
+    const start = (f.page - 1) * f.limit + 1;
+    const end   = Math.min(f.page * f.limit, f.total);
+    el.pagerInfo.innerHTML =
+      `Showing <strong>${start}–${end}</strong> of <strong>${f.total}</strong>`;
+    el.prevBtn.disabled = f.page <= 1;
+    el.nextBtn.disabled = f.page >= f.pages;
+  }
+
+  function updateCountInfo() {
+    const f = state.filter;
+    if (!f) { el.countInfo.textContent = ""; return; }
+    const hasFilters = Object.keys(state.currentFilters).length > 0;
+    const label = hasFilters ? "matching" : "total";
+    el.countInfo.innerHTML =
+      `<strong>${f.total.toLocaleString()}</strong> response${f.total === 1 ? "" : "s"} ${label}`;
+  }
+
+  el.prevBtn.addEventListener("click", () => {
+    if (state.page > 1) { state.page--; loadResponses(); }
+  });
+  el.nextBtn.addEventListener("click", () => {
+    state.page++; loadResponses();
+  });
+  el.refreshBtn.addEventListener("click", () => {
+    loadResponses();
+    showToast("Refreshed", "ok");
+  });
+
+  function exportQs() {
+    return new URLSearchParams(state.currentFilters).toString();
+  }
+  el.csvBtn.addEventListener("click",  () => { window.location = "/api/admin/export.csv?"  + exportQs(); });
+  el.xlsxBtn.addEventListener("click", () => { window.location = "/api/admin/export.xlsx?" + exportQs(); });
+  el.pdfBtn.addEventListener("click",  () => { window.open("/admin-print.html?" + exportQs(), "_blank", "noopener"); });
+
+  const SUBSTANCE_LABELS = {
+    coffee:   "Coffee",
+    tea:      "Tea",
+    energy:   "Energy drinks",
+    khat:     "Khat (Catha edulis)",
+    ginseng:  "Ginseng",
+    kola:     "Kola nut",
+    leonotis: "Leonotis leonurus (wild dagga)",
+  };
+  const KNOWLEDGE_LABELS = {
+    kn1: "Active stimulant in khat is cathinone",
+    kn2: "Chronic khat use has no effect on dental health",
+    kn3: "Ginseng is legal for recreational use in Kenya",
+    kn4: "Excessive caffeine can cause anxiety and insomnia",
+  };
+  const ATTITUDE_LABELS = {
+    att1: "Stimulants help students study longer",
+    att2: "Close friends use caffeine to study",
+    att3: "Aware of health risks of regular khat use",
+  };
+  const boolAnswer = (v) =>
+    v === true ? "True" : v === false ? "False" : "—";
+
+  function openModal(item) {
+    state.lastFocused = document.activeElement;
+    el.modalTitle.textContent = "Response detail";
+    el.modalMeta.textContent =
+      `ID ${item.id.slice(0, 8)} · submitted ${fmtDate(item.submitted_at)}`;
+
+    let h = "";
+
+    h += `<h4 class="sec-title">Section A — Demographics</h4>
+      <dl class="kv">
+        <div class="kv-row"><dt>Age</dt><dd>${escapeHtml(item.age ?? "—")}</dd></div>
+        <div class="kv-row"><dt>Gender</dt><dd>${escapeHtml(item.gender || "—")}</dd></div>
+        <div class="kv-row"><dt>Year of study</dt><dd>${escapeHtml(item.year_of_study || "—")}</dd></div>
+        <div class="kv-row"><dt>Residence</dt><dd>${escapeHtml(item.residence || "—")}</dd></div>
+      </dl>`;
+
+    h += `<h4 class="sec-title">Section B — Knowledge</h4>
+      <dl class="kv">
+        ${Object.entries(KNOWLEDGE_LABELS).map(([k, label]) =>
+          `<div class="kv-row">
+            <dt>${escapeHtml(label)}</dt>
+            <dd>${escapeHtml(boolAnswer(item[k]))}</dd>
+          </div>`
+        ).join("")}
+      </dl>`;
+
+    h += `<h4 class="sec-title">Section C — Substance use</h4>`;
+    const sub = item.substances || {};
+    for (const [id, label] of Object.entries(SUBSTANCE_LABELS)) {
+      const s = sub[id] || {};
+      const used = s.c1 === "Yes";
+      h += `<div class="substance">
+        <h4>${escapeHtml(label)}</h4>
+        <dl class="kv">
+          <div class="kv-row"><dt>Ever used</dt><dd>${escapeHtml(s.c1 || "—")}</dd></div>
+          ${used ? `
+            <div class="kv-row"><dt>Past 12 months</dt><dd>${escapeHtml(s.c2 || "—")}</dd></div>
+            <div class="kv-row"><dt>Past 30 days</dt><dd>${escapeHtml(s.c3 || "—")}</dd></div>
+            <div class="kv-row"><dt>Frequency</dt><dd>${escapeHtml(s.c4 || "—")}</dd></div>
+            <div class="kv-row"><dt>Reason</dt><dd>${escapeHtml(s.c5 || "—")}</dd></div>
+          ` : ""}
+        </dl>
+      </div>`;
+    }
+
+    if (item.other_substance) {
+      h += `<h4 class="sec-title">Other substance reported</h4>
+        <div class="modal-free-text">${escapeHtml(item.other_substance)}</div>`;
+    }
+
+    h += `<h4 class="sec-title">Section D — Attitudes (1–5)</h4>
+      <dl class="kv">
+        ${Object.entries(ATTITUDE_LABELS).map(([k, label]) => {
+          const v = item.attitudes && item.attitudes[k];
+          return `<div class="kv-row">
+            <dt>${escapeHtml(label)}</dt>
+            <dd>${v == null ? "—" : escapeHtml(v)}</dd>
+          </div>`;
+        }).join("")}
+      </dl>`;
+
+    if (item.perceived_effects) {
+      h += `<h4 class="sec-title">Section E — Perceived effects</h4>
+        <div class="modal-free-text">${escapeHtml(item.perceived_effects)}</div>`;
+    }
+
+    el.modalBody.innerHTML = h;
+    el.overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    setTimeout(() => el.modalClose.focus(), 60);
+  }
+
+  function closeModal() {
+    el.overlay.hidden = true;
+    document.body.style.overflow = "";
+    if (state.lastFocused && typeof state.lastFocused.focus === "function") {
+      state.lastFocused.focus();
+    }
+  }
+
+  el.modalClose.addEventListener("click", closeModal);
+  el.overlay.addEventListener("click", (e) => {
+    if (e.target === el.overlay) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !el.overlay.hidden) closeModal();
+    if (e.key === "Tab" && !el.overlay.hidden) {
+      const focusables = el.overlay.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last  = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    }
+  });
+
+  el.tbodyTable.addEventListener("click", (e) => {
+    const btn = e.target.closest(".view-btn");
+    const row = e.target.closest("tr[data-id]");
+    const id  = (btn && btn.dataset.id) || (row && row.dataset.id);
+    if (!id) return;
+    const item = itemCache.get(id);
+    if (item) openModal(item);
+  });
+  el.tbodyTable.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.matches("tr[data-id]")) {
+      const item = itemCache.get(e.target.dataset.id);
+      if (item) openModal(item);
+    }
+  });
+  el.cardList.addEventListener("click", (e) => {
+    const btn = e.target.closest(".resp-card");
+    if (!btn) return;
+    const item = itemCache.get(btn.dataset.id);
+    if (item) openModal(item);
+  });
+
+  checkSession();
+})();
+</script>
+</body>
+</html>

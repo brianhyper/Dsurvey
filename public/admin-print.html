@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Survey Report – Print</title>
+<style>
+  :root{
+    --green:#1b7a4b; --green-dark:#14603a; --green-light:#e8f5ee;
+    --ink:#1f2933; --muted:#6b7280; --line:#dfe6e2;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);line-height:1.5;background:#eef2ef;}
+  .sheet{max-width:900px;margin:24px auto;background:#fff;padding:48px 56px;
+    box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  h1{font-size:22px;margin:0 0 4px;color:var(--green-dark);}
+  h2{font-size:15px;color:var(--green-dark);margin:28px 0 10px;
+    text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid var(--green-light);padding-bottom:6px;}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 24px;}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 32px;font-size:13px;color:var(--muted);margin-bottom:32px;}
+  .meta b{color:var(--ink);}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 8px;}
+  .card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .card .n{font-size:24px;font-weight:700;color:var(--green-dark);line-height:1.1;}
+  .card .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px;}
+  th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);}
+  th{background:var(--green-light);color:var(--green-dark);font-weight:600;
+    font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
+  td.num,th.num{text-align:right;}
+  .footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);
+    font-size:11px;color:var(--muted);text-align:center;}
+  .print-btn{position:fixed;top:18px;right:18px;background:var(--green);color:#fff;
+    border:none;border-radius:9px;padding:11px 20px;font-size:14px;font-weight:600;
+    cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.15);}
+  .print-btn:hover{background:var(--green-dark);}
+  .loading{max-width:900px;margin:80px auto;text-align:center;color:var(--muted);}
+  @media print{
+    body{background:#fff;}
+    .sheet{box-shadow:none;margin:0;padding:0;max-width:none;}
+    .print-btn{display:none;}
+    h2{page-break-after:avoid;}
+    table{page-break-inside:auto;}
+    tr{page-break-inside:avoid;}
+    @page{margin:18mm 16mm;}
+  }
+</style>
+</head>
+<body>
+<button class="print-btn" id="printBtn" hidden>Print / Save as PDF</button>
+<div class="loading" id="loading">Loading report…</div>
+<div id="report" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  const SUBSTANCES = ['coffee','tea','energy','khat','ginseng','kola','leonotis'];
+  const SUB_LABEL = {
+    coffee:'Coffee', tea:'Tea', energy:'Energy Drinks', khat:'Khat (Catha edulis)',
+    ginseng:'Ginseng', kola:'Kola Nut', leonotis:'Leonotis leonurus (Wild Dagga)'
+  };
+  const FREQ = ['Daily','Weekly','Monthly','Rarely'];
+  const REASONS = ['To stay awake / study','Habit / social','Enjoy taste','Other'];
+  const ATTITUDES = [
+    'Stimulants like khat help students study longer',
+    'Most close friends use caffeine to study',
+    'Aware of health risks of regular khat use'
+  ];
+
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const pct = (n, d) => d > 0 ? Math.round((n / d) * 1000) / 10 : 0;
+  const ageBand = a => {
+    if (a == null) return '(blank)';
+    if (a < 18) return '<18';
+    if (a <= 20) return '18–20';
+    if (a <= 23) return '21–23';
+    if (a <= 26) return '24–26';
+    if (a <= 30) return '27–30';
+    return '31+';
+  };
+  function countBy(arr, fn) {
+    const m = new Map();
+    for (const r of arr) {
+      const v = fn(r) || '(blank)';
+      m.set(v, (m.get(v) || 0) + 1);
+    }
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  }
+  function median(a) {
+    if (!a.length) return null;
+    const s = [...a].sort((x, y) => x - y);
+    const m = Math.floor(s.length / 2);
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  }
+  function stddev(a) {
+    if (a.length < 2) return 0;
+    const mean = a.reduce((x, y) => x + y, 0) / a.length;
+    return Math.round(Math.sqrt(a.reduce((x, y) => x + (y - mean) ** 2, 0) / (a.length - 1)) * 100) / 100;
+  }
+
+  function table(headers, rows) {
+    return `<table><thead><tr>${headers.map(h =>
+      `<th class="${h.num ? 'num' : ''}">${esc(h.label)}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(r => `<tr>${r.map((c, i) =>
+        `<td class="${headers[i].num ? 'num' : ''}">${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  }
+
+  function renderReport(rows, filters) {
+    const total = rows.length;
+    const khatEver = rows.filter(r => ((r.substances || {}).khat || {}).c1 === 'Yes').length;
+    const today = new Date().toISOString().slice(0,10);
+    const todays = rows.filter(r => String(r.submitted_at).slice(0,10) === today).length;
+
+    const filterLine = Object.entries({
+      'From date': filters.from, 'To date': filters.to,
+      'Gender': filters.gender, 'Year': filters.year, 'Khat': filters.khat
+    }).filter(([, v]) => v).map(([k, v]) => `${k}: <b>${esc(v)}</b>`).join(' &nbsp;·&nbsp; ') || 'None (all responses)';
+
+    let h = '';
+
+    // Cover
+    h += `<div class="sheet">
+      <h1>Prevalence and Patterns of Plant Stimulant Use Among Pharmacy Students</h1>
+      <p class="sub">A confidential, self-administered research questionnaire · KMTC Nakuru Campus</p>
+      <div class="meta">
+        <div>Principal Researcher: <b>Denis Mwangi</b></div>
+        <div>Registration: <b>D/PHARM/24021/585</b></div>
+        <div>Supervisor: <b>Dr. Sylvester Kollum</b></div>
+        <div>Department: <b>Pharmacy, KMTC Nakuru</b></div>
+        <div>Report generated: <b>${new Date().toLocaleString()}</b></div>
+        <div>Filters: ${filterLine}</div>
+      </div>
+
+      <h2>Summary</h2>
+      <div class="cards">
+        <div class="card"><div class="n">${total}</div><div class="l">Submitted</div></div>
+        <div class="card"><div class="n">${todays}</div><div class="l">Today</div></div>
+        <div class="card"><div class="n">${khatEver}</div><div class="l">Khat ever used</div></div>
+        <div class="card"><div class="n">${pct(khatEver, total)}%</div><div class="l">Khat prevalence</div></div>
+      </div>
+    </div>`;
+
+    // Demographics
+    const demoSheet = (title, entries) => {
+      h += `<div class="sheet"><h2>${esc(title)}</h2>${table(
+        [{ label: 'Category' }, { label: 'Count', num: true }, { label: '%', num: true }],
+        entries.map(([v, n]) => [v, n, pct(n, total) + '%'])
+      )}</div>`;
+    };
+    demoSheet('Age distribution', countBy(rows, r => ageBand(r.age)));
+    demoSheet('Gender', countBy(rows, r => r.gender));
+    demoSheet('Year of study', countBy(rows, r => r.year_of_study));
+    demoSheet('Residence', countBy(rows, r => r.residence));
+
+    // Knowledge
+    const KL = {
+      kn1: { label: 'Active stimulant in khat is cathinone', correct: true },
+      kn2: { label: 'Chronic khat use has no effect on dental health', correct: false },
+      kn3: { label: 'Ginseng is legal for recreational use in Kenya', correct: false },
+      kn4: { label: 'Excessive caffeine can cause anxiety and insomnia', correct: true }
+    };
+    let kh = `<div class="sheet"><h2>Knowledge Assessment</h2>${table(
+      [{ label: 'Statement' }, { label: 'Key' }, { label: 'Correct', num: true }, { label: 'Answered', num: true }, { label: '%', num: true }],
+      Object.entries(KL).map(([k, meta]) => {
+        let c = 0, a = 0;
+        for (const r of rows) if (r[k] === true || r[k] === false) { a++; if (r[k] === meta.correct) c++; }
+        return [meta.label, meta.correct ? 'True' : 'False', c, a, pct(c, a) + '%'];
+      })
+    )}</div>`;
+    h += kh;
+
+    // Prevalence
+    h += `<div class="sheet"><h2>Prevalence of Plant Stimulant Use</h2>${table(
+      [{ label: 'Substance' }, { label: 'Ever', num: true }, { label: 'Past 12mo', num: true }, { label: 'Past 30d', num: true }],
+      SUBSTANCES.map(id => {
+        let e = 0, y = 0, m = 0;
+        for (const r of rows) {
+          const s = (r.substances || {})[id] || {};
+          if (s.c1 === 'Yes') e++;
+          if (s.c2 === 'Yes') y++;
+          if (s.c3 === 'Yes') m++;
+        }
+        return [
+          SUB_LABEL[id],
+          `${e} (${pct(e, total)}%)`,
+          `${y} (${pct(y, total)}%)`,
+          `${m} (${pct(m, total)}%)`
+        ];
+      })
+    )}</div>`;
+
+    // Frequency
+    h += `<div class="sheet"><h2>Frequency of Use (self-reported)</h2>${table(
+      [{ label: 'Substance' }, ...FREQ.map(f => ({ label: f, num: true })), { label: 'n', num: true }],
+      SUBSTANCES.map(id => {
+        const counts = Object.fromEntries(FREQ.map(f => [f, 0]));
+        let n = 0;
+        for (const r of rows) {
+          const v = ((r.substances || {})[id] || {}).c4;
+          if (v && counts[v] != null) { counts[v]++; n++; }
+        }
+        return [SUB_LABEL[id], ...FREQ.map(f => counts[f]), n];
+      })
+    )}</div>`;
+
+    // Reasons
+    h += `<div class="sheet"><h2>Primary Reason for Use</h2>${table(
+      [{ label: 'Substance' }, ...REASONS.map(r => ({ label: r, num: true })), { label: 'n', num: true }],
+      SUBSTANCES.map(id => {
+        const counts = Object.fromEntries(REASONS.map(r => [r, 0]));
+        let n = 0;
+        for (const r of rows) {
+          const v = ((r.substances || {})[id] || {}).c5;
+          if (v && counts[v] != null) { counts[v]++; n++; }
+        }
+        return [SUB_LABEL[id], ...REASONS.map(r => counts[r]), n];
+      })
+    )}</div>`;
+
+    // Attitudes
+    h += `<div class="sheet"><h2>Attitudes and Perceptions (1–5)</h2>${table(
+      [{ label: 'Statement' }, { label: 'Mean', num: true }, { label: 'Median', num: true }, { label: 'SD', num: true }, { label: 'n', num: true }],
+      ATTITUDES.map((label, i) => {
+        const key = 'att' + (i + 1);
+        const vals = rows.map(r => (r.attitudes || {})[key]).filter(v => typeof v === 'number');
+        const mean = vals.length ? Math.round((vals.reduce((a, b) => a + b, 0) / vals.length) * 100) / 100 : '—';
+        return [label, mean, median(vals) ?? '—', stddev(vals), vals.length];
+      })
+    )}</div>`;
+
+    // Cross-tabs
+    function strat(title, key) {
+      const groups = new Map();
+      for (const r of rows) {
+        const v = r[key] || '(blank)';
+        const k = ((r.substances || {}).khat || {}).c1 === 'Yes';
+        if (!groups.has(v)) groups.set(v, { n: 0, k: 0 });
+        const g = groups.get(v); g.n++; if (k) g.k++;
+      }
+      return { title, rows: [...groups.entries()] };
+    }
+    const stratAge = (() => {
+      const groups = new Map();
+      for (const r of rows) {
+        const v = ageBand(r.age);
+        const k = ((r.substances || {}).khat || {}).c1 === 'Yes';
+        if (!groups.has(v)) groups.set(v, { n: 0, k: 0 });
+        const g = groups.get(v); g.n++; if (k) g.k++;
+      }
+      return { title: 'By age band', rows: [...groups.entries()] };
+    })();
+    const strata = [strat('By year of study', 'year_of_study'), strat('By gender', 'gender'),
+                    strat('By residence', 'residence'), stratAge];
+    h += `<div class="sheet"><h2>Khat Use — Cross-tabulations</h2>${
+      strata.map(s => `<h3 style="font-size:13px;margin:18px 0 6px;color:var(--green-dark);">${esc(s.title)}</h3>` +
+        table(
+          [{ label: 'Stratum' }, { label: 'n', num: true }, { label: 'Khat users', num: true }, { label: '%', num: true }],
+          s.rows.map(([v, g]) => [v, g.n, g.k, pct(g.k, g.n) + '%'])
+        )).join('')
+    }</div>`;
+
+    // Footer page
+    h += `<div class="sheet">
+      <h2>Notes</h2>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;">
+        All responses are anonymous and were collected via a self-administered online questionnaire.
+        "Ever used" refers to lifetime use as reported by the respondent. "Past 12 months" and
+        "Past 30 days" are self-reported recall windows. Percentages are calculated against the
+        total number of submitted responses in the selected range (n = ${total}).
+        Knowledge items are scored correct when the respondent's answer matches the answer key.
+      </p>
+      <div class="footer">
+        KMTC Nakuru · Pharmacy Department · Denis Mwangi (D/PHARM/24021/585) · Supervisor: Dr. Sylvester Kollum<br>
+        Report generated ${new Date().toLocaleString()} · Confidential
+      </div>
+    </div>`;
+
+    $("report").innerHTML = h;
+    $("report").hidden = false;
+    $("loading").hidden = true;
+    $("printBtn").hidden = false;
+  }
+
+  async function init() {
+    // check auth
+    try {
+      const r = await fetch("/api/admin/me", { credentials: "same-origin" });
+      const j = await r.json();
+      if (!j.admin) {
+        document.body.innerHTML = '<div class="loading">Not signed in. <a href="/admin">Go to admin login</a>.</div>';
+        return;
+      }
+    } catch { return; }
+
+    // pull filters from the URL
+    const qs = new URLSearchParams(window.location.search);
+    const filters = {};
+    for (const k of ["from","to","gender","year","khat"]) {
+      if (qs.get(k)) filters[k] = qs.get(k);
+    }
+
+    // fetch all matching (capped)
+    const api = new URLSearchParams({ limit: "5000", page: "1", ...filters });
+    const r = await fetch("/api/admin/responses?" + api, { credentials: "same-origin" });
+    const j = await r.json();
+    if (!j.ok) {
+      document.getElementById("loading").textContent = j.error || "Failed to load data.";
+      return;
+    }
+    renderReport(j.items, filters);
+  }
+
+  $("printBtn").addEventListener("click", () => window.print());
+  init();
+})();
+</script>
+</body>
+</html>
